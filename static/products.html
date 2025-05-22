@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+            <div class="nav-menu">
+                <div class="auth-only">
+                    <a href="/help.html" class="nav-link">Help</a>
+                    <a href="/products.html" class="nav-link active">Products</a>
+                    <button id="logoutButton">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container auth-only">
+        <h2>Product Search</h2>
+        <div class="search-container mb-3">
+            <form id="searchForm" class="search-form">
+                <div class="form-group">
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Search products...">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <div id="productsList" class="products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        async function searchProducts(query = '') {
+            try {
+                const response = await fetch(`http://localhost:8000/products/search?q=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Failed to fetch products');
+                
+                const products = await response.json();
+                const productsHtml = products.map(product => `
+                    <div class="product-card">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <span class="product-category">${product.category}</span>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-actions">
+                                <p class="product-price">$${product.price.toFixed(2)}</p>
+                                <a href="/product.html?id=${product.id}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('productsList').innerHTML = 
+                    products.length ? productsHtml : '<p>No products found.</p>';
+            } catch (error) {
+                alert('Error searching products: ' + error.message);
+            }
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;
+            await searchProducts(query);
+        });
+
+        // Load all products on page load
+        searchProducts();
+    </script>
+</body>
+</html> 

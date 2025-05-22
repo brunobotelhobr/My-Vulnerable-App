@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+            <div class="nav-menu">
+                <a href="/cart.html" class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/challenge.html" class="cart-icon">
+                    <i class="fas fa-flag"></i>
+                </a>
+                <div class="user-menu">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Account</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-menu-content" id="userMenuContent">
+                        <a href="/profile.html" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i>My Address
+                        </a>
+                        <a href="/orders.html" class="user-menu-item">
+                            <i class="fas fa-box"></i>Orders
+                        </a>
+                        <a href="/change-password.html" class="user-menu-item">
+                            <i class="fas fa-key"></i>Change Password
+                        </a>
+                        <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                        <a href="#" class="user-menu-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container auth-only">
+        <div class="product-details">
+            <div id="productInfo" class="product-info-section">
+                <!-- Product info will be loaded here -->
+            </div>
+
+            <div class="comments-section">
+                <h2>Product Reviews</h2>
+                <form id="commentForm" class="comment-form">
+                    <div class="form-group">
+                        <textarea id="commentContent" class="form-control" placeholder="Write your review..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+
+                <div id="commentsList">
+                    <!-- Comments will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // User menu toggle
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenuContent = document.getElementById('userMenuContent');
+
+        userMenuBtn.addEventListener('click', () => {
+            userMenuContent.classList.toggle('show');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenuContent.contains(e.target)) {
+                userMenuContent.classList.remove('show');
+            }
+        });
+
+        // Cart functionality
+        let cartCount = 0;
+        const cartCountElement = document.querySelector('.cart-count');
+        
+        function updateCartCount(count) {
+            cartCount = count;
+            cartCountElement.textContent = count;
+        }
+
+        // Load cart count
+        async function loadCartCount() {
+            try {
+                const response = await fetch('/api/cart/count');
+                if (!response.ok) throw new Error('Failed to fetch cart count');
+                
+                const result = await response.json();
+                updateCartCount(result.count);
+            } catch (error) {
+                console.error('Error loading cart count:', error);
+            }
+        }
+
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+            window.location.href = '/products.html';
+        }
+
+        async function loadProduct() {
+            try {
+                const response = await fetch(`http://localhost:8000/products/search?q=' AND id=${productId} --`);
+                if (!response.ok) throw new Error('Failed to fetch product');
+                
+                const products = await response.json();
+                if (products.length === 0) {
+                    window.location.href = '/products.html';
+                    return;
+                }
+
+                const product = products[0];
+                document.title = `${product.name} - FishingStore`;
+                
+                document.getElementById('productInfo').innerHTML = `
+                    <div class="product-main">
+                        <div class="product-details-info">
+                            <h1>${product.name}</h1>
+                            <p class="product-category">${product.category}</p>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-actions">
+                                <p class="product-price">$${product.price.toFixed(2)}</p>
+                                <div class="quantity-selector">
+                                    <label for="quantity">Quantity:</label>
+                                    <div class="quantity-controls">
+                                        <button type="button" class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+                                        <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="99">
+                                        <button type="button" class="quantity-btn" onclick="updateQuantity(1)">+</button>
+                                    </div>
+                                </div>
+                                <button onclick="addToCart(${product.id})" class="btn btn-primary btn-add-cart">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                alert('Error loading product: ' + error.message);
+            }
+        }
+
+        function updateQuantity(change) {
+            const input = document.getElementById('quantity');
+            const newValue = Math.max(1, Math.min(99, parseInt(input.value) + change));
+            input.value = newValue;
+        }
+
+        async function addToCart(productId) {
+            try {
+                const quantity = parseInt(document.getElementById('quantity').value);
+                
+                const result = await auth.apiRequest('/api/cart/add', 'POST', {
+                    product_id: productId,
+                    quantity: quantity
+                });
+
+                updateCartCount(result.cart_count);
+
+                // Show success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'alert alert-success';
+                successMessage.style.display = 'block';
+                successMessage.style.position = 'fixed';
+                successMessage.style.top = '20px';
+                successMessage.style.left = '50%';
+                successMessage.style.transform = 'translateX(-50%)';
+                successMessage.style.zIndex = '1000';
+                successMessage.textContent = 'Item added to cart successfully!';
+                
+                document.body.appendChild(successMessage);
+                
+                // Remove the message after 3 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert('Failed to add item to cart. Please try again.');
+            }
+        }
+
+        async function loadComments() {
+            try {
+                if (!auth.isLoggedIn()) {
+                    document.getElementById('commentsList').innerHTML = '<p class="error-message">Please <a href="/login.html">login</a> to view and post reviews.</p>';
+                    document.getElementById('commentForm').style.display = 'none';
+                    return;
+                }
+
+                const comments = await auth.apiRequest(`/products/${productId}/comments`);
+                const commentsHtml = comments.map(comment => `
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">${comment.name}</span>
+                            <span class="comment-date">${new Date(comment.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="comment-content">${comment.content}</div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('commentsList').innerHTML = 
+                    comments.length ? commentsHtml : '<p>No reviews yet. Be the first to review!</p>';
+            } catch (error) {
+                if (error.message.includes('Session expired')) {
+                    document.getElementById('commentsList').innerHTML = '<p class="error-message">Your session has expired. Please <a href="/login.html">login</a> again to view and post reviews.</p>';
+                    document.getElementById('commentForm').style.display = 'none';
+                } else {
+                    document.getElementById('commentsList').innerHTML = `<p class="error-message">Error loading reviews. Please try again later.</p>`;
+                    console.error('Error loading comments:', error);
+                }
+            }
+        }
+
+        document.getElementById('commentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await auth.apiRequest(`/products/${productId}/comments`, 'POST', {
+                    content: document.getElementById('commentContent').value
+                });
+                document.getElementById('commentForm').reset();
+                loadComments();
+            } catch (error) {
+                alert('Error posting comment: ' + error.message);
+            }
+        });
+
+        // Load product and comments on page load
+        loadProduct();
+        loadComments();
+        loadCartCount();
+    </script>
+</body>
+</html> 

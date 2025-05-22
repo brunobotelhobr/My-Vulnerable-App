@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Login</h2>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div id="loginAlert" class="alert" style="display: none;"></div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <p class="auth-links">
+                Don't have an account? <a href="/register.html">Register</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const success = await auth.login(username, password);
+                if (!success) {
+                    throw new Error('Login failed');
+                }
+                // O redirecionamento é feito automaticamente pela função login
+            } catch (error) {
+                const alert = document.getElementById('loginAlert');
+                alert.textContent = 'Invalid username or password';
+                alert.className = 'alert alert-error';
+                alert.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html> 
