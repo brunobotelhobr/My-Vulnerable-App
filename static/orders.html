@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .profile-section h2 {
+            text-align: center;
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.5em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .profile-section h2 i {
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+
+        .under-construction-icon {
+            font-size: 4em;
+            color: #4CAF50;
+            margin: 20px 0;
+            display: inline-block;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message {
+            color: #666;
+            font-size: 1.1em;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+            <div class="nav-menu">
+                <a href="/cart.html" class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/challenge.html" class="cart-icon">
+                    <i class="fas fa-flag"></i>
+                </a>
+                <div class="user-menu">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Account</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-menu-content" id="userMenuContent">
+                        <a href="/profile.html" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i>My Address
+                        </a>
+                        <a href="/orders.html" class="user-menu-item">
+                            <i class="fas fa-box"></i>Orders
+                        </a>
+                        <a href="/change-password.html" class="user-menu-item">
+                            <i class="fas fa-key"></i>Change Password
+                        </a>
+                        <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                        <a href="#" class="user-menu-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container auth-only">
+        <div class="profile-section">
+            <h2><i class="fas fa-box"></i> My Orders</h2>
+            <i class="fas fa-cog under-construction-icon"></i>
+            <p class="message">We're working hard to bring you a great order management experience.</p>
+            <p class="message">This feature will be available soon!</p>
+            <a href="/" class="btn-primary">
+                <i class="fas fa-shopping-basket"></i>Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // User menu toggle
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenuContent = document.getElementById('userMenuContent');
+
+        userMenuBtn.addEventListener('click', () => {
+            userMenuContent.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenuContent.contains(e.target)) {
+                userMenuContent.classList.remove('show');
+            }
+        });
+
+        // Load cart count
+        async function loadCartCount() {
+            try {
+                const response = await fetch('/api/cart/count');
+                if (!response.ok) throw new Error('Failed to fetch cart count');
+                
+                const result = await response.json();
+                document.querySelector('.cart-count').textContent = result.count;
+            } catch (error) {
+                console.error('Error loading cart count:', error);
+            }
+        }
+
+        // Initialize
+        loadCartCount();
+    </script>
+</body>
+</html>

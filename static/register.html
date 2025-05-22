@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Create Account</h2>
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div id="registerAlert" class="alert" style="display: none;"></div>
+                <button type="submit" class="btn-primary">Register</button>
+            </form>
+            <p class="auth-links">
+                Already have an account? <a href="/login.html">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                const alert = document.getElementById('registerAlert');
+                alert.textContent = 'Passwords do not match';
+                alert.className = 'alert alert-error';
+                alert.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await auth.register(username, password);
+                // O redirecionamento é feito automaticamente pela função login dentro do register
+            } catch (error) {
+                const alert = document.getElementById('registerAlert');
+                alert.textContent = error.message;
+                alert.className = 'alert alert-error';
+                alert.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html> 

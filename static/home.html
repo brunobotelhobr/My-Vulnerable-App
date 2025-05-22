@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FishingStore - Your Ultimate Fishing Gear Shop</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for fishing gear...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-menu">
+                <a href="/cart.html" class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/challenge.html" class="cart-icon">
+                    <i class="fas fa-flag"></i>
+                </a>
+                <div class="user-menu">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Account</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-menu-content" id="userMenuContent">
+                        <a href="/profile.html" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i>My Address
+                        </a>
+                        <a href="/orders.html" class="user-menu-item">
+                            <i class="fas fa-box"></i>Orders
+                        </a>
+                        <a href="/change-password.html" class="user-menu-item">
+                            <i class="fas fa-key"></i>Change Password
+                        </a>
+                        <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                        <a href="#" class="user-menu-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container auth-only">
+        <div class="hero-banner">
+            <div class="hero-content">
+                <h1>Welcome to FishingStore</h1>
+                <p>Discover the best fishing gear for your next adventure</p>
+                <a href="#products" class="btn-primary">Shop Now</a>
+            </div>
+        </div>
+
+        <div class="products-section">
+            <h2>Featured Products</h2>
+            <div id="productsList" class="products-grid"></div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // User menu toggle
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenuContent = document.getElementById('userMenuContent');
+
+        userMenuBtn.addEventListener('click', () => {
+            userMenuContent.classList.toggle('show');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenuContent.contains(e.target)) {
+                userMenuContent.classList.remove('show');
+            }
+        });
+
+        // Cart functionality
+        let cartCount = 0;
+        const cartCountElement = document.querySelector('.cart-count');
+        
+        function updateCartCount(count) {
+            cartCount = count;
+            cartCountElement.textContent = count;
+        }
+
+        // Products search and display
+        async function searchProducts(query = '') {
+            try {
+                const searchUrl = `/products/search?q=${encodeURIComponent(query)}`;
+                const response = await fetch(searchUrl);
+                if (!response.ok) throw new Error('Failed to fetch products');
+                
+                const products = await response.json();
+                const productsHtml = products.map(product => `
+                    <div class="product-card">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <span class="product-category">${product.category}</span>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-actions">
+                                <p class="product-price">$${product.price.toFixed(2)}</p>
+                                <a href="/product.html?id=${product.id}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('productsList').innerHTML = 
+                    products.length ? productsHtml : '<p>No products found.</p>';
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('productsList').innerHTML = '<p>Error loading products. Please try again.</p>';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const query = document.getElementById('searchInput').value;
+            searchProducts(query);
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value;
+                searchProducts(query);
+            }
+        });
+
+        // Load cart count on page load
+        async function loadCartCount() {
+            try {
+                const response = await fetch('/api/cart/count');
+                if (!response.ok) throw new Error('Failed to fetch cart count');
+                
+                const result = await response.json();
+                updateCartCount(result.count);
+            } catch (error) {
+                console.error('Error loading cart count:', error);
+            }
+        }
+
+        // Initialize
+        searchProducts();
+        loadCartCount();
+
+        if (document.querySelector('.auth-only')) {
+            if (!auth.isLoggedIn()) {
+                window.location.href = '/login.html';
+            }
+        }
+    </script>
+</body>
+</html> 

