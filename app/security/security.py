@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 # Security configuration
 SECRET_KEY = "your-secret-key-keep-it-secret"  # Change this in production
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 3000
 
 # Security utilities
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
