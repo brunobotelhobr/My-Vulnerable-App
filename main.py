@@ -48,7 +48,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Root route redirect
 @app.get("/")
 async def root():
-    return RedirectResponse(url="/home.html")
+    return RedirectResponse(url="/index.html")
 
 # Database Models
 class User(Base):

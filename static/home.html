@@ -150,6 +150,12 @@
         // Initialize
         searchProducts();
         loadCartCount();
+
+        if (document.querySelector('.auth-only')) {
+            if (!auth.isLoggedIn()) {
+                window.location.href = '/login.html';
+            }
+        }
     </script>
 </body>
 </html> 
