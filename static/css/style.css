@@ -526,7 +526,7 @@ body {
 .profile-container {
     max-width: 800px;
     margin: 40px auto;
-    padding: 0 20px;
+    padding: 20px;
 }
 
 .profile-section {
@@ -614,10 +614,24 @@ body {
 
 /* Cart page */
 .cart-container {
-    width: 100%;
-    max-width: 100%;
-    margin: 40px auto;
+    max-width: 1024px;
+    margin: 2rem auto;
     padding: 0 20px;
+}
+
+.cart-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.cart-section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .cart-empty {
