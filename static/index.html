@@ -6,8 +6,25 @@
     <title>FishingStore - Your Ultimate Fishing Gear Shop</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .affiliate-banner {
+            background-color: #8a2be2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
+    <script>
+        // Check for affiliate parameter and display banner
+        const urlParams = new URLSearchParams(window.location.search);
+        const affiliate = urlParams.get('affiliate');
+        if (affiliate) {
+            document.write('<div class="affiliate-banner">You are accessing our store through our affiliate partner: ' + decodeURIComponent(affiliate) + '</div>');
+        }
+    </script>
 
     <div class="hero">
         <div class="hero-content">
