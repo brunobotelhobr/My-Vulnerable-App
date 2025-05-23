@@ -1283,4 +1283,35 @@ h4 {
 
 .btn-add-cart i {
     font-size: 1.1em;
+}
+
+/* Challenge page styles */
+.challenge-page pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin: 1rem 0;
+}
+
+.challenge-page code {
+    color: #d63384;
+}
+
+.challenge-page .card-body h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #495057;
+}
+
+.challenge-page .card-body h4:first-child {
+    margin-top: 0;
+}
+
+.challenge-page .card-body ol {
+    padding-left: 1.2rem;
+}
+
+.challenge-page .card-body ol li {
+    margin-bottom: 0.5rem;
 } 

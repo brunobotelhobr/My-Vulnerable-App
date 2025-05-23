@@ -3,6 +3,8 @@ import hashlib
 import sqlite3
 from datetime import datetime, timedelta
 from typing import Optional
+import pickle
+import base64
 
 # Third-party imports
 from fastapi import FastAPI, Depends, HTTPException, status, Query
@@ -733,6 +735,88 @@ async def change_password(
     
     finally:
         conn.close()
+
+
+# User config endpoints
+@app.get("/api/cart/export")
+async def export_cart_data(current_user: User = Depends(get_current_user)):
+    """Exporta dados do carrinho em formato pickle (base64)."""
+    conn = sqlite3.connect('app.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    
+    try:
+        # Get cart items with product details
+        c.execute('''
+            SELECT c.*, p.name, p.description, p.price
+            FROM cart c
+            JOIN products p ON c.product_id = p.id
+            WHERE c.user_id = ?
+        ''', (current_user.id,))
+        cart_items = c.fetchall()
+        
+        # Create cart data dictionary
+        cart_data = {
+            'user_id': current_user.id,
+            'items': [{
+                'product_id': item['product_id'],
+                'quantity': item['quantity'],
+                'name': item['name'],
+                'description': item['description'],
+                'price': item['price']
+            } for item in cart_items]
+        }
+        
+        # Serialize and encode cart data
+        serialized = pickle.dumps(cart_data)
+        encoded = base64.b64encode(serialized).decode()
+        
+        return {"cart_data": encoded}
+    
+    finally:
+        conn.close()
+
+
+@app.post("/api/cart/import")
+async def import_cart_data(
+    cart_data: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Importa dados do carrinho em formato pickle (base64)."""
+    try:
+        # WARNING: This is intentionally vulnerable to RCE
+        decoded = base64.b64decode(cart_data)
+        cart_data = pickle.loads(decoded)  # Vulnerable to RCE
+        
+        conn = sqlite3.connect('app.db')
+        c = conn.cursor()
+        
+        try:
+            # Clear current cart
+            c.execute('DELETE FROM cart WHERE user_id = ?', (current_user.id,))
+            
+            # Import cart items
+            for item in cart_data['items']:
+                c.execute('''
+                    INSERT INTO cart (user_id, product_id, quantity)
+                    VALUES (?, ?, ?)
+                ''', (
+                    current_user.id,
+                    item['product_id'],
+                    item['quantity']
+                ))
+            
+            conn.commit()
+            return {"message": "Cart data imported successfully"}
+            
+        finally:
+            conn.close()
+            
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid cart data: {str(e)}"
+        )
 
 
 # Initialize database
