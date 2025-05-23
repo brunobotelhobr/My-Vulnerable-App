@@ -43,7 +43,7 @@
             color: #333;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             cursor: pointer;
         }
         
@@ -52,6 +52,8 @@
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
             transition: transform 0.3s ease;
+            margin-left: auto;
+            padding-left: 1rem;
         }
         
         .accordion-button[aria-expanded="true"]:after {
@@ -59,20 +61,19 @@
         }
         
         .accordion-content {
-            padding: 0;
-            max-height: 0;
+            height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: height 0.3s ease-out;
         }
         
         .accordion-content.active {
-            max-height: 1000px;
-            transition: max-height 0.5s ease-in;
+            height: auto;
         }
         
         .accordion-body {
             padding: 1rem;
             border-top: 1px solid #e0e0e0;
+            text-align: left;
         }
         
         .challenge-badge {
@@ -107,10 +108,12 @@
             margin: 1rem 0;
             font-family: monospace;
             white-space: pre-wrap;
+            text-align: left;
         }
 
         .steps-list {
             padding-left: 1.2rem;
+            text-align: left;
         }
 
         .steps-list li {
@@ -121,6 +124,21 @@
             margin-right: 0.5rem;
             width: 24px;
             text-align: center;
+        }
+
+        h4 {
+            text-align: left;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .alert p {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -312,15 +330,26 @@ POST /api/cart/import</div>
                 // Close all other accordion items
                 document.querySelectorAll('.accordion-content').forEach(item => {
                     if (item !== content) {
-                        item.classList.remove('active');
-                        item.previousElementSibling.querySelector('.accordion-button').setAttribute('aria-expanded', 'false');
+                        const itemButton = item.previousElementSibling.querySelector('.accordion-button');
+                        itemButton.setAttribute('aria-expanded', 'false');
+                        item.style.height = '0px';
                     }
                 });
                 
                 // Toggle current accordion item
-                button.setAttribute('aria-expanded', !isExpanded);
-                content.classList.toggle('active');
+                if (!isExpanded) {
+                    button.setAttribute('aria-expanded', 'true');
+                    content.style.height = content.scrollHeight + 'px';
+                } else {
+                    button.setAttribute('aria-expanded', 'false');
+                    content.style.height = '0px';
+                }
             });
+        });
+
+        // Initialize accordion items with zero height
+        document.querySelectorAll('.accordion-content').forEach(content => {
+            content.style.height = '0px';
         });
 
         // User menu toggle
