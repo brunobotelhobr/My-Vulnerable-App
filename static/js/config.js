@@ -36,14 +36,14 @@ async function backupCart() {
         // Pega os dados do carrinho
         const data = await response.json();
         
-        // Cria um blob com os dados JSON completos
-        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        // Cria um blob com os dados base64 do carrinho
+        const blob = new Blob([data.cart_data], { type: 'text/plain' });
         
         // Cria um link para download
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'cart_backup.json';
+        a.download = 'cart_backup.dat';
         
         // Adiciona o link ao documento e clica nele
         document.body.appendChild(a);
@@ -78,17 +78,15 @@ async function restoreCart(event) {
         const reader = new FileReader();
         reader.onload = async (e) => {
             try {
-                // Parse o JSON do arquivo
-                const data = JSON.parse(e.target.result);
+                // Pega o conteúdo base64 do arquivo
+                const cart_data = e.target.result;
 
-                // Envia os dados para a API
-                const response = await fetch('/api/cart/import', {
+                // Envia os dados para a API como query parameter
+                const response = await fetch(`/api/cart/import?cart_data=${encodeURIComponent(cart_data)}`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(data.cart_data)
+                    }
                 });
 
                 if (!response.ok) {
