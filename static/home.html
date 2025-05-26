@@ -93,8 +93,7 @@
         // Products search and display
         async function searchProducts(query = '') {
             try {
-                const searchUrl = `http://localhost:8000/products/search?q=${encodeURIComponent(query)}`;
-                
+                const searchUrl = `/products/search?q=${encodeURIComponent(query)}`;
                 const response = await fetch(searchUrl);
                 if (!response.ok) throw new Error('Failed to fetch products');
                 

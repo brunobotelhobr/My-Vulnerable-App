@@ -41,7 +41,7 @@
     <script>
         async function searchProducts(query = '') {
             try {
-                const response = await fetch(`http://localhost:8000/products/search?q=${encodeURIComponent(query)}`);
+                const response = await fetch(`/products/search?q=${encodeURIComponent(query)}`);
                 if (!response.ok) throw new Error('Failed to fetch products');
                 
                 const products = await response.json();
