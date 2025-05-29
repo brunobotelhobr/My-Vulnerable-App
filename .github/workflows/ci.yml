@@ -43,10 +43,3 @@ jobs:
           docker stop my-vulnerable-app-test || true
           docker rm my-vulnerable-app-test || true
 
-  security-sca:
-    name: Security SCA
-    uses: ./.github/workflows/sec-sca.yml
-    # needs: build-and-test
-    permissions:
-      contents: read
-      pull-requests: write

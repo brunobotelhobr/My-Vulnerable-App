@@ -2,9 +2,13 @@
 # This workflow uses GitHub's official "dependency-review-action" and is highly configurable.
 # All available options are included and commented for easy customization.
 
-name: sec-sca
+name: Security-SCA
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   # Allow the workflow to be triggered by manual dispatch, push, or pull request events
   workflow_call:
   # Trigger the workflow on manual dispatch or push/pull request events
