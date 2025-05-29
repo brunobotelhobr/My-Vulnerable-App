@@ -1,11 +1,8 @@
 name: CI
 
 on:
-  # Allow the workflow to be triggered by manual dispatch, push, or pull request events
   workflow_call:
-  # Trigger the workflow on manual dispatch or push/pull request events
   workflow_dispatch:
-  # Trigger the workflow on push or pull request events to the main branch
   push:
     branches: [main]
   pull_request:
@@ -13,8 +10,8 @@ on:
 
 jobs:
   build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,5 +43,7 @@ jobs:
           docker stop my-vulnerable-app-test || true
           docker rm my-vulnerable-app-test || true
 
-      - name: Run Security SCA (sec-sca)
-        uses: ./.github/workflows/sec-sca.yml
+  security-sca:
+    name: SCA
+    uses: ./.github/workflows/sec-sca.yml
+    needs: build-and-test
