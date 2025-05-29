@@ -29,7 +29,7 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           # Defines the threshold for the level of severity. The action will fail on any pull requests that introduce vulnerabilities of the specified severity level or higher.
-          fail-on-severity: critical
+          fail-on-severity: high
 
           # Contains a list of allowed licenses. The action will fail on pull requests that introduce dependencies with licenses that do not match the list.
           # allow-licenses: MIT,Apache-2.0
@@ -38,7 +38,7 @@ jobs:
           # deny-licenses: GPL-3.0
 
           # Contains a list of strings of the build environments you want to support. The action will fail on pull requests that introduce vulnerabilities in the scopes that match the list.
-          fail-on-scopes: runtime,development,unknown
+          # fail-on-scopes: runtime,development,unknown
 
           # Contains a list of GitHub Advisory Database IDs that can be skipped during detection.
           # allow-ghsas: GHSA-xxxx-xxxx-xxxx
@@ -47,7 +47,7 @@ jobs:
           license-check: true
 
           # Enable or disable the vulnerability check performed by the action.
-          vulnerability-check: true
+          # vulnerability-check: true
 
           # Contains a list of packages that will be excluded from license checks.
           # allow-dependencies-licenses: pkg:pypi/somepackage@1.0.0
@@ -57,7 +57,7 @@ jobs:
           head-ref: ${{ github.sha }}
 
           # Enable or disable reporting the review summary as a comment in the pull request. Possible values: always, on-failure, never
-          comment-summary-in-pr: on-failure
+          comment-summary-in-pr: always
 
           # Any number of packages to block in a PR. This option will match on the exact version provided. If no version is provided, the option will treat the specified package as a wildcard and deny all versions.
           # deny-packages: pkg:pypi/unsafe-package
