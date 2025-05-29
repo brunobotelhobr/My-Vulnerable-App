@@ -1,0 +1,126 @@
+# Dependency Review Action custom configuration file
+# See: https://github.com/actions/dependency-review-action/blob/main/docs/configuration.md
+
+# List of allowed licenses (SPDX identifiers)
+# allow-licenses:
+#   - MIT
+#   - Apache-2.0
+
+# List of denied licenses (SPDX identifiers)
+# deny-licenses:
+#   - GPL-3.0
+
+# List of allowed GitHub Security Advisory IDs (GHSAs) to skip
+# allow-ghsas:
+#   - GHSA-xxxx-xxxx-xxxx
+
+# List of denied GitHub Security Advisory IDs (GHSAs)
+# deny-ghsas:
+#   - GHSA-yyyy-yyyy-yyyy
+
+# List of allowed dependencies (purl format)
+# allow-dependencies:
+#   - pkg:pypi/safe-package@1.0.0
+
+# List of denied dependencies (purl format)
+# deny-dependencies:
+#   - pkg:pypi/unsafe-package
+
+# List of allowed groups/namespaces (purl format)
+# allow-groups:
+#   - pkg:pypi/safe-namespace
+
+# List of denied groups/namespaces (purl format)
+# deny-groups:
+#   - pkg:pypi/unsafe-namespace
+
+# List of allowed dependency scopes
+# allow-scopes:
+#   - runtime
+#   - development
+#   - unknown
+
+# List of denied dependency scopes
+# deny-scopes:
+#   - test
+
+# List of allowed manifest files (relative paths)
+allow-manifests:
+  - requirements.txt
+#   - package.json
+
+# List of denied manifest files (relative paths)
+# deny-manifests:
+#   - Pipfile.lock
+
+# List of allowed package managers
+# allow-package-managers:
+#   - pip
+#   - npm
+
+# List of denied package managers
+# deny-package-managers:
+#   - yarn
+
+# List of allowed ecosystems
+# allow-ecosystems:
+#   - pypi
+#   - npm
+
+# List of denied ecosystems
+# deny-ecosystems:
+#   - maven
+
+# List of allowed file extensions
+# allow-extensions:
+#   - .txt
+#   - .json
+
+# List of denied file extensions
+# deny-extensions:
+#   - .lock
+
+# List of allowed file paths (regex)
+# allow-paths:
+#   - ".*requirements.*"
+
+# List of denied file paths (regex)
+# deny-paths:
+#   - ".*Pipfile.*"
+
+# List of allowed severities (low, moderate, high, critical)
+# allow-severities:
+#   - low
+#   - moderate
+#   - high
+#   - critical
+
+# List of denied severities
+# deny-severities:
+#   - critical
+
+# List of allowed advisories (by URL)
+# allow-advisories:
+#   - https://github.com/advisories/GHSA-xxxx-xxxx-xxxx
+
+# List of denied advisories (by URL)
+# deny-advisories:
+#   - https://github.com/advisories/GHSA-yyyy-yyyy-yyyy
+
+# List of allowed dependency types
+# allow-types:
+#   - direct
+#   - indirect
+
+# List of denied dependency types
+# deny-types:
+#   - indirect
+
+# List of allowed manifest types
+# allow-manifest-types:
+#   - requirements
+#   - package
+
+# List of denied manifest types
+# deny-manifest-types:
+#   - lock

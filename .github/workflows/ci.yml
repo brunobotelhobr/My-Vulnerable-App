@@ -24,6 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+    
       - name: Build Docker image
         run: |
           docker build -t my-vulnerable-app:ci .
@@ -40,3 +41,6 @@ jobs:
         run: |
           docker stop my-vulnerable-app-test || true
           docker rm my-vulnerable-app-test || true
+
+      - name: Run Security SCA (sec-sca)
+        uses: ./.github/workflows/sec-sca.yml
