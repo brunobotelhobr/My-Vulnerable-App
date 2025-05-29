@@ -53,8 +53,8 @@ jobs:
           # allow-dependencies-licenses: pkg:pypi/somepackage@1.0.0
 
           # Provide custom git references for the git base/head when performing the comparison check. Only used for event types other than pull_request and pull_request_target.
-          # base-ref: main
-          # head-ref: feature-branch
+          base-ref: ${{ github.event.before || github.sha }}
+          head-ref: ${{ github.sha }}
 
           # Enable or disable reporting the review summary as a comment in the pull request. Possible values: always, on-failure, never
           comment-summary-in-pr: on-failure
