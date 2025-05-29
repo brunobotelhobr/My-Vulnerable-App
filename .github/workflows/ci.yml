@@ -47,3 +47,6 @@ jobs:
     name: SCA
     uses: ./.github/workflows/sec-sca.yml
     needs: build-and-test
+    permissions:
+      contents: read
+      pull-requests: write
