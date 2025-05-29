@@ -5,11 +5,11 @@
 name: sec-sca
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # Allow the workflow to be triggered by manual dispatch, push, or pull request events
   workflow_call:
+  # Trigger the workflow on manual dispatch or push/pull request events
+  workflow_dispatch:
+  # Trigger the workflow every day at midnight UTC
   schedule:
     - cron: '0 0 * * *'
 

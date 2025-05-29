@@ -1,6 +1,11 @@
 name: CI
 
 on:
+  # Allow the workflow to be triggered by manual dispatch, push, or pull request events
+  workflow_call:
+  # Trigger the workflow on manual dispatch or push/pull request events
+  workflow_dispatch:
+  # Trigger the workflow on push or pull request events to the main branch
   push:
     branches: [main]
   pull_request:
@@ -24,7 +29,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-    
       - name: Build Docker image
         run: |
           docker build -t my-vulnerable-app:ci .
