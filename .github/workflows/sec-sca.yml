@@ -13,8 +13,8 @@ on:
   # Trigger the workflow on manual dispatch or push/pull request events
   workflow_dispatch:
   # Trigger the workflow every day at midnight UTC
-  schedule:
-    - cron: '0 0 * * *'
+#   schedule:
+#     - cron: '0 0 * * *'
 
 permissions:
   contents: read
