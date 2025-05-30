@@ -22,7 +22,7 @@ permissions:
   # security-events: write  # Uncomment if you want to upload SARIF results
 
 jobs:
-  Scan:
+  SCA:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
