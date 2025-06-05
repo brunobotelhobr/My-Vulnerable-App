@@ -12,9 +12,6 @@ on:
   workflow_call:
   # Trigger the workflow on manual dispatch or push/pull request events
   workflow_dispatch:
-  # Trigger the workflow every day at midnight UTC
-#   schedule:
-#     - cron: '0 0 * * *'
 
 permissions:
   contents: read
@@ -34,26 +31,8 @@ jobs:
           # Defines the threshold for the level of severity. The action will fail on any pull requests that introduce vulnerabilities of the specified severity level or higher.
           fail-on-severity: high
 
-          # Contains a list of allowed licenses. The action will fail on pull requests that introduce dependencies with licenses that do not match the list.
-          # allow-licenses: MIT,Apache-2.0
-
-          # Contains a list of prohibited licenses. The action will fail on pull requests that introduce dependencies with licenses that match the list.
-          # deny-licenses: GPL-3.0
-
-          # Contains a list of strings of the build environments you want to support. The action will fail on pull requests that introduce vulnerabilities in the scopes that match the list.
-          # fail-on-scopes: runtime,development,unknown
-
-          # Contains a list of GitHub Advisory Database IDs that can be skipped during detection.
-          # allow-ghsas: GHSA-xxxx-xxxx-xxxx
-
           # Enable or disable the license check performed by the action.
           license-check: true
-
-          # Enable or disable the vulnerability check performed by the action.
-          # vulnerability-check: true
-
-          # Contains a list of packages that will be excluded from license checks.
-          # allow-dependencies-licenses: pkg:pypi/somepackage@1.0.0
 
           # Provide custom git references for the git base/head when performing the comparison check. Only used for event types other than pull_request and pull_request_target.
           base-ref: ${{ github.event.before || github.sha }}
