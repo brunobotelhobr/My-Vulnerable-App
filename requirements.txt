@@ -13,11 +13,11 @@ python-json-logger==3.2.0
 nltk==3.9.1
 
 # For testing, vulnerable dependencies
-PyYAML==5.3
+#PyYAML==5.3
 # Werkzeug==0.16.0
 # Django==1.2.1
 # Flask==0.12
-urllib3==1.24.1
+# urllib3==1.24.1
 # Pillow==6.2.0
 # cryptography==2.1.4
 # paramiko==2.4.0
