@@ -22,7 +22,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const affiliate = urlParams.get('affiliate');
         if (affiliate) {
-            document.write('<div class="affiliate-banner">You are accessing our store through our affiliate partner: ' + decodeURIComponent(affiliate) + '</div>');
+            const banner = document.createElement('div');
+            banner.className = 'affiliate-banner';
+            banner.textContent = `You are accessing our store through our affiliate partner: ${affiliate}`;
+            document.body.insertBefore(banner, document.body.firstChild);
         }
     </script>
 
