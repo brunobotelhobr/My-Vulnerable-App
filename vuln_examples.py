@@ -9,7 +9,7 @@ def full_ssrf() -> None:
     target = request.args["target"]
 
     # BAD: user has full control of URL
-    resp: requests.Response = requests.get("https://" + target + ".example.com/data/")
+    # resp: requests.Response = requests.get("https://" + target + ".example.com/data/")
 
     # # GOOD: `subdomain` is controlled by the server.
     # subdomain: Literal['europe'] | Literal['world'] = "europe" if target == "EU" else "world"
@@ -21,4 +21,4 @@ def code_execution(request):
         # #BAD -- Allow user to define code to be run.
         # exec("setname('%s')" % first_name)
         #GOOD --Call code directly
-        setname(first_name)
+        #setname(first_name)
