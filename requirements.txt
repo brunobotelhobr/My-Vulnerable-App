@@ -21,4 +21,4 @@ nltk==3.9.1
 # Pillow==6.2.0
 # cryptography==2.1.4
 # paramiko==2.4.0
-# sqlparse==0.2.4
+sqlparse==0.2.4

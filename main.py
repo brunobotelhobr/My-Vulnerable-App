@@ -2,9 +2,9 @@
 import hashlib
 import sqlite3
 from datetime import datetime, timedelta
-from typing import Optional
 import pickle
 import base64
+from typing import Any
 
 # Third-party imports
 from fastapi import FastAPI, Depends, HTTPException, status, Query
@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, DateTime
+from sqlalchemy import Engine, create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from fastapi.responses import RedirectResponse
@@ -26,9 +26,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Database configuration
 SQLALCHEMY_DATABASE_URL = "sqlite:///./app.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine: Engine = create_engine(url=SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+Base= declarative_base()  # type: ignore
 
 # FastAPI app initialization
 app = FastAPI()
@@ -43,28 +43,28 @@ app.add_middleware(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(path="/static", app=StaticFiles(directory="static"), name="static")
 
 # Root route redirect
 @app.get("/")
-async def root():
+async def root() -> RedirectResponse:
     return RedirectResponse(url="/index.html")
 
 # Database Models
 class User(Base):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    __tablename__: str = "users"
+    id = Column(__name_pos=Integer, primary_key=True, index=True)
+    username = Column(__name_pos=String, unique=True, index=True)
+    hashed_password = Column(__name_pos=String)
 
 
 class Comment(Base):
-    __tablename__ = "comments"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    __tablename__: str = "comments"
+    id = Column(__name_pos=Integer, primary_key=True, index=True)
+    name = Column(__name_pos=String, index=True)
     content = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    product_id = Column(Integer, index=True)
+    created_at = Column(__name_pos=DateTime, default=datetime.utcnow)
+    product_id = Column(__name_pos=Integer, index=True)
 
 
 # Pydantic Models
@@ -74,7 +74,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    username: str| None = None
 
 
 class UserBase(BaseModel):
