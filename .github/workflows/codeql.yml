@@ -1,8 +1,12 @@
 name: "CodeQL Advanced"
 
 on:
+  workflow_call:
+  workflow_dispatch:
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
+  push:
+    branches-ignore: [main]
 
 jobs:
   analyze:
