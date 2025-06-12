@@ -1,4 +1,4 @@
-name: 'Dependency Action Scan'
+name: 'Dependabot Advanced'
 on: [pull_request]
 
 permissions:
