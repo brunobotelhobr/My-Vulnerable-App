@@ -1,6 +1,7 @@
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
+from datetime import datetime, timezone
 
 Base = declarative_base()
 
@@ -33,9 +34,10 @@ class Comment(Base):
     name = Column(String)
     content = Column(String)
     product_id = Column(Integer, ForeignKey("products.id"))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class CommentCreate:
+
     def __init__(self, content: str):
-        self.content = content 
+        self.content = content

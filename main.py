@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime, timedelta
 import pickle
 import base64
-from typing import Any
+from typing import Any, Optional
 
 # Third-party imports
 from fastapi import FastAPI, Depends, HTTPException, status, Query
@@ -52,19 +52,19 @@ async def root() -> RedirectResponse:
 
 # Database Models
 class User(Base):
-    __tablename__: str = "users"
-    id = Column(__name_pos=Integer, primary_key=True, index=True)
-    username = Column(__name_pos=String, unique=True, index=True)
-    hashed_password = Column(__name_pos=String)
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
 
 
 class Comment(Base):
-    __tablename__: str = "comments"
-    id = Column(__name_pos=Integer, primary_key=True, index=True)
-    name = Column(__name_pos=String, index=True)
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
     content = Column(String)
-    created_at = Column(__name_pos=DateTime, default=datetime.utcnow)
-    product_id = Column(__name_pos=Integer, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    product_id = Column(Integer, index=True)
 
 
 # Pydantic Models
